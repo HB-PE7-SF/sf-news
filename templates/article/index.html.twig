@@ -6,7 +6,9 @@
 
 {% block body %}
   {% for article in articles %}
-    <div>{{ article.title }}</div>
+    <div>
+      <a href="{{ path('article_item', { id: article.id }) }}">{{ article.title }}</a>
+    </div>
   {% else %}
     <p>Aucun article trouvé</p>
   {% endfor %}
