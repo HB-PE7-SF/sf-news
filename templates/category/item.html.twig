@@ -1,15 +1,15 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-  Tous les articles
+  {{ category.name }}
 {% endblock %}
 
 {% block body %}
-  <h1>新聞</h1>
+  <h1>{{ category.name }}</h1>
 
-  {% for article in articles %}
+  {% for article in category.articles %}
     {% include 'article/_article_card.html.twig' with { article: article } only %}
   {% else %}
-    <p>Aucun article trouvé</p>
+    <p>Aucun article dans cette catégorie</p>
   {% endfor %}
 {% endblock %}
