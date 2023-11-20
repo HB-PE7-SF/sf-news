@@ -30,11 +30,7 @@ class ArticleType extends AbstractType
                 'class' => Category::class,
                 'choice_label' => 'name'
             ])
-            ->add('Enregistrer', SubmitType::class, [
-                'attr' => [
-                    'class' => 'bg-blue-600 hover:bg-blue-800 text-white px-5 py-2'
-                ]
-            ])
+            ->add('Enregistrer', SubmitType::class)
         ;
     }
 
