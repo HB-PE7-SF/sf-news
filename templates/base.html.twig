@@ -20,6 +20,12 @@
     <header>{{ include('nav.html.twig') }}</header>
 
     <main class="prose mx-auto">
+      {% for type, messages in app.flashes(['success', 'error']) %}
+        {% for message in messages %}
+          <div class="bg-{{ type == 'success' ? 'green' : 'red' }}-200 text-{{ type == 'success' ? 'green' : 'red' }}-700 py-2 px-5 my-4">{{ message }}</div>
+        {% endfor %}
+      {% endfor %}
+
       {% block body %}
         <h1>HUMAN BOOSTER</h1>
       {% endblock %}
