@@ -32,6 +32,7 @@ class ArticleCrudController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $article->setCreatedAt(new \DateTime());
+            $article->setAuthor($this->getUser());
             $entityManager->persist($article);
             $entityManager->flush();
 
@@ -55,6 +56,8 @@ class ArticleCrudController extends AbstractController
     #[Route('/{id}/edit', name: 'app_article_crud_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Article $article, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessGranted('ARTICLE_EDIT', $article);
+
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
 
@@ -73,6 +76,8 @@ class ArticleCrudController extends AbstractController
     #[Route('/{id}', name: 'app_article_crud_delete', methods: ['POST'])]
     public function delete(Request $request, Article $article, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessGranted('ARTICLE_DELETE', $article);
+
         if ($this->isCsrfTokenValid('delete'.$article->getId(), $request->request->get('_token'))) {
             $entityManager->remove($article);
             $entityManager->flush();

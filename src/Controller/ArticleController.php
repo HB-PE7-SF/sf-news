@@ -3,10 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Entity\User;
 use App\Form\ArticleType;
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,11 +50,27 @@ class ArticleController extends AbstractController
         ]);
     }
 
-    #[Route('/articles/{id}', name: 'article_item')]
+    #[Route('/articles/{id<\d+>}', name: 'article_item')]
     public function item(Article $article): Response
     {
         return $this->render('article/item.html.twig', [
             'article' => $article
         ]);
+    }
+
+    #[Route('/articles/me', name: 'articles_me')]
+    public function articlesByConnectedUser(): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $user = $this->getUser();
+
+        // Type-Guard
+        if (!$user instanceof User) {
+            return $this->redirectToRoute('homepage');
+        }
+
+        $articles = $user->getArticles();
+
+        return $this->render('article/me.html.twig', ['articles' => $articles]);
     }
 }

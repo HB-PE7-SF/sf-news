@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Mes articles
+{% endblock %}
+
+{% block body %}
+  <h1>Mes articles</h1>
+  <h2>{{ articles|length }} articles</h2>
+
+  {% for article in articles %}
+    {{ include('article/_article_card.html.twig', { article: article }) }}
+  {% else %}
+    <p>Vous n'avez encore écrit aucun article</p>
+  {% endfor %}
+{% endblock %}

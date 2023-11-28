@@ -25,6 +25,23 @@ class AppFixtures extends Fixture
     {
         $faker = Factory::create("fr_FR");
 
+        $regularUser = new User();
+        $regularUser
+            ->setEmail('regular@mycorp.info')
+            ->setPassword($this->hasher->hashPassword($regularUser, 'test1234'));
+
+        $manager->persist($regularUser);
+
+        $adminUser = new User();
+        $adminUser
+            ->setEmail($this->adminEmail)
+            ->setRoles(["ROLE_ADMIN"])
+            ->setPassword($this->hasher->hashPassword($adminUser, 'admin1234'));
+
+        $manager->persist($adminUser);
+
+        $users = [$regularUser, $adminUser];
+
         $categories = [];
 
         for ($i = 0; $i < self::NB_CATEGORIES; $i++) {
@@ -42,25 +59,11 @@ class AppFixtures extends Fixture
                 ->setContent($faker->realTextBetween(500, 1400))
                 ->setCreatedAt($faker->dateTimeBetween('-2 years'))
                 ->setVisible($faker->boolean(80))
-                ->setCategory($faker->randomElement($categories));
+                ->setCategory($faker->randomElement($categories))
+                ->setAuthor($faker->randomElement($users));
 
             $manager->persist($article);
         }
-
-        $regularUser = new User();
-        $regularUser
-            ->setEmail('regular@mycorp.info')
-            ->setPassword($this->hasher->hashPassword($regularUser, 'test1234'));
-
-        $manager->persist($regularUser);
-
-        $adminUser = new User();
-        $adminUser
-            ->setEmail($this->adminEmail)
-            ->setRoles(["ROLE_ADMIN"])
-            ->setPassword($this->hasher->hashPassword($adminUser, 'admin1234'));
-
-        $manager->persist($adminUser);
 
         $manager->flush();
     }
