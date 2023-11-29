@@ -39,10 +39,6 @@ class IndexController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $newsletterEmail
-                ->setSubscribed(true)
-                ->setSubscriptionDate(new \DateTime());
-
             $em->persist($newsletterEmail);
             $em->flush();
 
