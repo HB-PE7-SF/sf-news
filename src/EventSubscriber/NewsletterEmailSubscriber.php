@@ -2,30 +2,27 @@
 
 namespace App\EventSubscriber;
 
-use App\Entity\NewsletterEmail;
-use Doctrine\Bundle\DoctrineBundle\EventSubscriber\EventSubscriberInterface;
-use Doctrine\ORM\Event\PrePersistEventArgs;
-use Doctrine\ORM\Events;
+use App\Event\NewsletterSubscribedEvent;
+use App\Newsletter\EmailNotification;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class NewsletterEmailSubscriber implements EventSubscriberInterface
 {
-    public function getSubscribedEvents(): array
-    {
-        return [
-          Events::prePersist
-        ];
+    public function __construct(
+        private EmailNotification $emailNotification
+    ) {
     }
 
-    public function prePersist(PrePersistEventArgs $args): void
+    public function onNewsletterSubscribed(NewsletterSubscribedEvent $event): void
     {
-        $entity = $args->getObject();
+        $email = $event->getEmail();
+        $this->emailNotification->confirmSubscription($email);
+    }
 
-        if (!$entity instanceof NewsletterEmail) {
-            return;
-        }
-
-        $entity
-          ->setSubscribed(true)
-          ->setSubscriptionDate(new \DateTime());
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            NewsletterSubscribedEvent::NAME => 'onNewsletterSubscribed',
+        ];
     }
 }
