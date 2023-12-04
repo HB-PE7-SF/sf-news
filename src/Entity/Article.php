@@ -26,7 +26,7 @@ class Article
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['articles:read', 'articles:read:item'])]
+    #[Groups(['articles:read:item'])]
     private ?string $content = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
