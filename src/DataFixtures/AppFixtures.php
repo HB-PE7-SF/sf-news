@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\ApiToken;
 use App\Entity\Article;
 use App\Entity\Category;
 use App\Entity\User;
@@ -62,6 +63,10 @@ class AppFixtures extends Fixture
 
             $manager->persist($article);
         }
+
+        $apiToken = new ApiToken();
+        $apiToken->setToken("51ohFpI4htIkmk8oYzzpL6xVSC3");
+        $manager->persist($apiToken);
 
         $manager->flush();
     }
